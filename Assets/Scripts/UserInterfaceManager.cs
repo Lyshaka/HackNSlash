@@ -19,14 +19,19 @@ public class UserInterfaceManager : MonoBehaviour
 
 	[Header("Health")]
 	[SerializeField] private Slider hBar;
+	[SerializeField] private TextMeshProUGUI hText;
 
 	[Header("Mana")]
 	[SerializeField] private Slider mBar;
+	[SerializeField] private TextMeshProUGUI mText;
 
 	[Header("Spells")]
 	[SerializeField] private Image spell0Icon;
+	[SerializeField] private TextMeshProUGUI spell0Cost;
 	[SerializeField] private Image spell1Icon;
+	[SerializeField] private TextMeshProUGUI spell1Cost;
 	[SerializeField] private Image spell2Icon;
+	[SerializeField] private TextMeshProUGUI spell2Cost;
 	[SerializeField] private Sprite none;
 	[SerializeField] private Image selectedImage;
 
@@ -51,10 +56,25 @@ public class UserInterfaceManager : MonoBehaviour
 		if (spells.Count >= 3)
 		{
 			spell0Icon.sprite = (spells[0] != null) ? spells[0].GetImage() : none;
+			spell0Cost.SetText("" + spells[0].GetCost());
 			spell1Icon.sprite = (spells[1] != null) ? spells[1].GetImage() : none;
+			spell1Cost.SetText("" + spells[1].GetCost());
 			spell2Icon.sprite = (spells[2] != null) ? spells[2].GetImage() : none;
+			spell2Cost.SetText("" + spells[2].GetCost());
 		}
 
+	}
+
+	public void UpdateHealth(float h, float hMax)
+	{
+		hBar.value = h / hMax;
+		hText.SetText((int)h + "/" + hMax);
+	}
+
+	public void UpdateMana(float m, float mMax)
+	{
+		mBar.value = m / mMax;
+		mText.SetText((int)m + "/" + mMax);
 	}
 
 	public void UpdateSelectedSpell(int index)

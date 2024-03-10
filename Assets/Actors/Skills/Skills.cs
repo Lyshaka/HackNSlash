@@ -50,6 +50,11 @@ public abstract class Skills	//Classe abstraite (ne peut pas être instanciée) 
 		return (dexterity);
 	}
 
+	public float GetCost()
+	{
+		return (cost);
+	}
+
 	public Sprite GetImage()
 	{
 		return (icon);

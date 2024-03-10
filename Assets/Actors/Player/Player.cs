@@ -22,8 +22,10 @@ public class Player : MonoBehaviour
 	[SerializeField] private float damage;						//Dégâts du joueur
 	[SerializeField] private float damagePerLevel = 1.5f;		//Dégâts par niveau
 	[SerializeField] private float health;						//Points de vie du joueur
-	[SerializeField] private float maxHealth;					//Points de vie maximum du joueur
+	[SerializeField] private float maxHealth = 100;				//Points de vie maximum du joueur
 	[SerializeField] private float mana;						//Mana du joueur
+	[SerializeField] private float maxMana = 100;				//Mana maximum du joueur
+	[SerializeField] private float manaRegen = 10;				//Regeneration de la mana du joueur (mana/s)
 	[SerializeField] private int experience;					//Expérience du joueur
 	[SerializeField] private int xpRequired = 100;				//Expérience requise jusqu'au prochain niveau
 	[SerializeField] private int level = 1;						//Niveau du joueur
@@ -169,14 +171,23 @@ public class Player : MonoBehaviour
 		UpdateStats();
 	}
 
+	private void Initialize()
+	{
+		health = maxHealth;
+		ui.UpdateHealth(health, maxHealth);
+		mana = maxMana;
+		ui.UpdateMana(mana, maxMana);
+	}
+
 	void Start()
 	{
 		rb = GetComponent<Rigidbody>();									//Récupération du rigidbody du character
 		cam = GetComponentInChildren<Camera>();							//Récupération de la caméra
 		cam.transform.LookAt(gameObject.transform);						//Rotation de la caméra vers le joueur
 		detectionLayer = (1 << 6);
-		manager = GameObject.Find("Manager").GetComponent<Manager>();
 		ui = GetComponentInChildren<UserInterfaceManager>();
+		Initialize();
+		manager = GameObject.Find("Manager").GetComponent<Manager>();
 		ui.UpdateExperience(experience, xpRequired, level);
 		UpdateStats();
 		for (int i = 0; i < 3; i++)
@@ -229,14 +240,20 @@ public class Player : MonoBehaviour
 
 		if (Input.GetButton("Fire1"))
 		{
-			if (availableSpells[spellIndex].GetSubType() != "Channel" && !buttonHeld)
+			Debug.Log("Cost : " + availableSpells[spellIndex].GetCost());
+			if (mana >= availableSpells[spellIndex].GetCost())
 			{
-				spellManager.UseSpell(playerMesh.transform, SpellManager.Type.projectile, (Spell)availableSpells[spellIndex], this);
-			}
-			buttonHeld = true;
-			if (availableSpells[spellIndex].GetSubType() == "Channel")
-			{
-				channelTime += Time.deltaTime;
+				if (availableSpells[spellIndex].GetSubType() != "Channel" && !buttonHeld)
+				{
+					spellManager.UseSpell(playerMesh.transform, SpellManager.Type.projectile, (Spell)availableSpells[spellIndex], this);
+					mana -= availableSpells[spellIndex].GetCost();
+					ui.UpdateMana(mana, maxMana);
+				}
+				buttonHeld = true;
+				if (availableSpells[spellIndex].GetSubType() == "Channel")
+				{
+					channelTime += Time.deltaTime;
+				}
 			}
 		}
 		else
@@ -271,5 +288,15 @@ public class Player : MonoBehaviour
 		}
 
 		rb.velocity = new Vector3(movInput.x, 0f, movInput.y) * speed;												//Application des mouvements sur le personnage
+	
+		if (mana < maxMana)
+		{
+			mana += manaRegen * Time.deltaTime;
+			ui.UpdateMana(mana, maxMana);
+			if (mana > maxMana)
+			{
+				mana = maxMana;
+			}
+		}
 	}
 }

@@ -304,7 +304,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9353cb5d6987eda4582f4fba2d3e83a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemies: []
 --- !u!135 &8107080033147920630
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -441,14 +440,15 @@ MonoBehaviour:
   damage: 0
   damagePerLevel: 1.5
   health: 0
-  maxHealth: 0
+  maxHealth: 100
   mana: 0
+  maxMana: 100
+  manaRegen: 25
   experience: 0
   xpRequired: 100
   level: 0
-  strength: 0
-  intelligence: 0
-  dexterity: 0
+  spellIndex: 0
+  availableSpells: []
   inventory: []
   nearObjects: []
   nearestObject: {fileID: 0}
@@ -465,6 +465,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellObj: {fileID: 5174122605670879181, guid: 0b898ac2e5b961843a96845911e41402, type: 3}
+  spellDamage: 0
 --- !u!135 &3552233585332888999
 SphereCollider:
   m_ObjectHideFlags: 0
