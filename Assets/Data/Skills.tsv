@@ -1,0 +1,6 @@
+ID	Nom	Type	Sous-Type	Niveau Max	Dégâts	Scaling Force	Scaling Intelligence	Scaling Dextérité	Coût (en mana)	Temps de cast	Icone (nom exact)
+0	fire_ball	Spell	Projectile	5	10	30%	20%	0%	20	0,1	icon
+1	lightning_strike	Spell	Area	5	10	10%	20%	0%	20	0,1	2
+2	ice_cone	Spell	Channel	5	10	10%	30%	10%	20	0,1	3
+3	magic_missile	Spell	Projectile	5	10	0%	0%	0%	20	0,1	4
+4	acid_drop	Spell	Projectile	5	10	0%	0%	0%	20	0,1	5
