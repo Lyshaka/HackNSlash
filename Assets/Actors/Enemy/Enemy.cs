@@ -81,7 +81,7 @@ public class Enemy : MonoBehaviour
 	{
 		Color color = mat.color;
 		mat.color = Color.white;
-		yield return new WaitForSeconds(0.05f);
+		yield return new WaitForSeconds(0.03f);
 		mat.color = color;
 	}
 }

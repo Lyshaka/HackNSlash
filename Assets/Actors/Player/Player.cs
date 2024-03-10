@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
 	private Camera cam;											//Camera du joueur
 	private RaycastHit hit;										//Impact du raycast du curseur
 	private LayerMask detectionLayer;							//Layer de détection du curseur
+	private LayerMask enemyLayer;								//Layer des ennemis
 
 	[Header("Player Stats")]
 	[SerializeField] private float baseDamage = 10f;			//Dégâts de base
@@ -91,6 +92,11 @@ public class Player : MonoBehaviour
 	public float GetDamage()
 	{
 		return (damage);
+	}
+
+	public LayerMask GetEnemyLayer()
+	{
+		return (enemyLayer);
 	}
 
 	void OnTriggerEnter(Collider other)
@@ -186,6 +192,7 @@ public class Player : MonoBehaviour
 		cam = GetComponentInChildren<Camera>();							//Récupération de la caméra
 		cam.transform.LookAt(gameObject.transform);						//Rotation de la caméra vers le joueur
 		detectionLayer = (1 << 6);
+		enemyLayer = (1 << 8);
 		ui = GetComponentInChildren<UserInterfaceManager>();
 		Initialize();
 		manager = GameObject.Find("Manager").GetComponent<Manager>();
@@ -241,13 +248,13 @@ public class Player : MonoBehaviour
 
 		if (Input.GetButton("Fire1"))
 		{
-			Debug.Log("Cost : " + availableSpells[spellIndex].GetCost());
+			//Debug.Log("Cost : " + availableSpells[spellIndex].GetCost());
 			
 			if (availableSpells[spellIndex].GetSubType() != "Channel" && !buttonHeld)
 			{
 				if (mana >= availableSpells[spellIndex].GetCost())
 				{
-					spellManager.UseSpell(playerMesh.transform, SpellManager.Type.projectile, (Spell)availableSpells[spellIndex], this);
+					spellManager.UseSpell(playerMesh.transform, (Spell)availableSpells[spellIndex], this);
 					mana -= availableSpells[spellIndex].GetCost();
 					ui.UpdateMana(mana, maxMana);
 				}

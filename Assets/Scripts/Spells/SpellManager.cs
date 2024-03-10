@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class SpellManager : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class SpellManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		Debug.Log("Damage : " + spellDamage);
+		//Debug.Log("Damage : " + spellDamage);
 	}
 
 	public enum Type
@@ -49,17 +50,17 @@ public class SpellManager : MonoBehaviour
 
 	}
 
-	public void UseSpell(Transform origin, Type type, Spell spell, Player player)
+	public void UseSpell(Transform origin, Spell spell, Player player)
 	{
-		switch (type)
+		switch (spell.GetSubType())
 		{
-			case Type.projectile:
+			case "Projectile":
 				LaunchProjectile(origin, spell, player);
 				break;
-			case Type.area:
-				//doothershit
+			case "Area":
+				CastArea(origin, spell, player);
 				break;
-			case Type.channel:
+			case "Channel":
 				//doothershit
 				break;
 			default:
@@ -86,6 +87,20 @@ public class SpellManager : MonoBehaviour
 	{
 		GameObject obj = Instantiate(Resources.Load<GameObject>("Spells/" + spell.GetName()), origin.position, origin.rotation);
 		obj.GetComponent<ProjectileParent>().SetDamage(ComputeDamage(spell, player.GetStats(), player.GetDamage()));
+	}
+
+	void CastArea(Transform origin, Spell spell, Player player)
+	{
+		bool hasHit = Physics.Raycast(origin.position, origin.forward, out RaycastHit hit, 10f, player.GetEnemyLayer());
+		if (spell.GetName() == "lightning_strike" && hasHit)
+		{
+			GameObject obj = Instantiate(Resources.Load<GameObject>("Spells/lightning_strike"), hit.point, Quaternion.identity);
+			LightningStrike ls = obj.GetComponent<LightningStrike>();
+			ls.SetOrigin(origin);
+			ls.SetBounceNb(5);
+			ls.SetDamage(ComputeDamage(spell, player.GetStats(), player.GetDamage()));
+			ls.AddHitTarget(hit.transform.gameObject);
+		}
 	}
 
 	public void SetChannel(Transform origin, Spell spell, Player player)
