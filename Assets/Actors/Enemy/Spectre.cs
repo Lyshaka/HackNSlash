@@ -28,6 +28,14 @@ public class Spectre : Enemy
 		}
 	}
 
+	public override void ApplyChannelEffect(float damage, float deltaTime)
+	{
+		if (phase)														//On applique les dégâts que si la phase est active
+		{
+			base.ApplyChannelEffect(damage, deltaTime);
+		}
+	}
+
 	IEnumerator PhaseShift()
 	{
 		phase = !phase;													//Changement de phase

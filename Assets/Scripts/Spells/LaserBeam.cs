@@ -6,7 +6,7 @@ public class LaserBeam : ChannelParent
 {
 
 	public LineRenderer beamLine;
-	public Collider beamColl;
+	public bool isActive = false;
 	public List<GameObject> enemies = new List<GameObject>(); //SerializeField causes some errors :s
 
 
@@ -23,9 +23,13 @@ public class LaserBeam : ChannelParent
 
 	void OnTriggerExit(Collider other)
 	{
-		if (enemies.Contains(other.gameObject.transform.parent.gameObject))
+		if (other.gameObject.layer == 9)
 		{
-			DeleteFromList(other.gameObject.transform.parent.gameObject);
+			GameObject obj = other.gameObject.transform.parent.gameObject;
+			if (enemies.Contains(obj) && obj != null)
+			{
+				DeleteFromList(obj);
+			}
 		}
 	}
 
@@ -46,7 +50,6 @@ public class LaserBeam : ChannelParent
     void Start()
     {
 		beamLine = GetComponent<LineRenderer>();
-		beamColl = GetComponent<Collider>();
 		Activate(true);
     }
 
@@ -55,7 +58,7 @@ public class LaserBeam : ChannelParent
     {
         foreach (GameObject enemy in enemies)
 		{
-			if (enemy != null)
+			if (enemy != null && isActive)
 			{
 				enemy.GetComponent<Enemy>().ApplyChannelEffect(damage, Time.deltaTime);
 			}
@@ -64,7 +67,7 @@ public class LaserBeam : ChannelParent
 
 	public void Activate(bool value)
 	{
+		isActive = value;
 		beamLine.enabled = value;
-		beamColl.enabled = value;
 	}
 }

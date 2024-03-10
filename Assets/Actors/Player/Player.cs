@@ -46,6 +46,7 @@ public class Player : MonoBehaviour
 
 	private GameObject selected;								//Prefab de l'objet de selection
 	private bool buttonHeld = false;
+	private bool isChanneling = false;
 	private float channelTime = 0f;
 
 	public class Stats
@@ -256,6 +257,7 @@ public class Player : MonoBehaviour
 			{
 				if (mana > 0)
 				{
+					isChanneling = true;
 					spellManager.ActivateChannel(true);
 					mana -= availableSpells[spellIndex].GetCost() * Time.deltaTime;
 					channelTime += Time.deltaTime;
@@ -271,6 +273,7 @@ public class Player : MonoBehaviour
 			buttonHeld = false;
 			if (availableSpells[spellIndex].GetSubType() == "Channel")
 			{
+				isChanneling = false;
 				spellManager.ActivateChannel(false);
 			}
 			channelTime = 0;
@@ -319,14 +322,14 @@ public class Player : MonoBehaviour
 
 		rb.velocity = new Vector3(movInput.x, 0f, movInput.y) * speed;												//Application des mouvements sur le personnage
 	
-		if (mana < maxMana)
+		if (mana < maxMana && !isChanneling)
 		{
 			mana += manaRegen * Time.deltaTime;
-			ui.UpdateMana(mana, maxMana);
 			if (mana > maxMana)
 			{
 				mana = maxMana;
 			}
 		}
+		ui.UpdateMana(mana, maxMana);
 	}
 }
