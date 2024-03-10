@@ -6,6 +6,8 @@ public class SpellManager : MonoBehaviour
 {
 	public GameObject spellObj;
 
+	public GameObject activeChannelObj;
+
 	public float spellDamage;
 
 	// Start is called before the first frame update
@@ -43,6 +45,7 @@ public class SpellManager : MonoBehaviour
 	public enum Channel
 	{
 		cone,
+		beam,
 
 	}
 
@@ -83,5 +86,22 @@ public class SpellManager : MonoBehaviour
 	{
 		GameObject obj = Instantiate(Resources.Load<GameObject>("Spells/" + spell.GetName()), origin.position, origin.rotation);
 		obj.GetComponent<ProjectileParent>().SetDamage(ComputeDamage(spell, player.GetStats(), player.GetDamage()));
+	}
+
+	public void SetChannel(Transform origin, Spell spell, Player player)
+	{
+		activeChannelObj = Instantiate(Resources.Load<GameObject>("Spells/" + spell.GetName()), origin);
+		activeChannelObj.GetComponentInChildren<LaserBeam>().SetDamage(ComputeDamage(spell, player.GetStats(), player.GetDamage()));
+	}
+
+	public void RemoveChannel()
+	{
+		Destroy(activeChannelObj);
+		activeChannelObj = null;
+	}
+
+	public void ActivateChannel(bool value)
+	{
+		activeChannelObj.GetComponentInChildren<LaserBeam>().Activate(value);
 	}
 }

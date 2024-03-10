@@ -241,24 +241,38 @@ public class Player : MonoBehaviour
 		if (Input.GetButton("Fire1"))
 		{
 			Debug.Log("Cost : " + availableSpells[spellIndex].GetCost());
-			if (mana >= availableSpells[spellIndex].GetCost())
+			
+			if (availableSpells[spellIndex].GetSubType() != "Channel" && !buttonHeld)
 			{
-				if (availableSpells[spellIndex].GetSubType() != "Channel" && !buttonHeld)
+				if (mana >= availableSpells[spellIndex].GetCost())
 				{
 					spellManager.UseSpell(playerMesh.transform, SpellManager.Type.projectile, (Spell)availableSpells[spellIndex], this);
 					mana -= availableSpells[spellIndex].GetCost();
 					ui.UpdateMana(mana, maxMana);
 				}
-				buttonHeld = true;
-				if (availableSpells[spellIndex].GetSubType() == "Channel")
+			}
+			buttonHeld = true;
+			if (availableSpells[spellIndex].GetSubType() == "Channel")
+			{
+				if (mana > 0)
 				{
+					spellManager.ActivateChannel(true);
+					mana -= availableSpells[spellIndex].GetCost() * Time.deltaTime;
 					channelTime += Time.deltaTime;
+				}
+				else
+				{
+					spellManager.ActivateChannel(false);
 				}
 			}
 		}
 		else
 		{
 			buttonHeld = false;
+			if (availableSpells[spellIndex].GetSubType() == "Channel")
+			{
+				spellManager.ActivateChannel(false);
+			}
 			channelTime = 0;
 		}
 
@@ -272,6 +286,14 @@ public class Player : MonoBehaviour
 			{
 				spellIndex--;
 			}
+			if (availableSpells[spellIndex].GetSubType() == "Channel")
+			{
+				spellManager.SetChannel(playerMesh.transform, availableSpells[spellIndex], this);
+			}
+			else
+			{
+				spellManager.RemoveChannel();
+			}
 			ui.UpdateSelectedSpell(spellIndex);
 		}
 		if (Input.mouseScrollDelta.y > 0f)
@@ -283,6 +305,14 @@ public class Player : MonoBehaviour
 			else
 			{
 				spellIndex++;
+			}
+			if (availableSpells[spellIndex].GetSubType() == "Channel")
+			{
+				spellManager.SetChannel(playerMesh.transform, availableSpells[spellIndex], this);
+			}
+			else
+			{
+				spellManager.RemoveChannel();
 			}
 			ui.UpdateSelectedSpell(spellIndex);
 		}

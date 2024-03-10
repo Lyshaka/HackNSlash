@@ -21,7 +21,10 @@ public class EnemyNavManager : MonoBehaviour
 
 	void OnTriggerExit(Collider other)
 	{
-		DeleteFromList(other.gameObject.transform.parent.gameObject);
+		if (enemies.Contains(other.gameObject.transform.parent.gameObject))
+		{
+			DeleteFromList(other.gameObject.transform.parent.gameObject);
+		}
 	}
 
 	public void DeleteFromList(GameObject obj)

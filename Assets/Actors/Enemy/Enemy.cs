@@ -61,6 +61,22 @@ public class Enemy : MonoBehaviour
 		}
 	}
 
+	public virtual void ApplyChannelEffect(float damage, float deltaTime)
+	{
+		float appliedDamage = damage * (1 - armor);
+		health -= appliedDamage * deltaTime;
+		//Debug.Log("Damage : " + appliedDamage + ", Real Damage : " + appliedDamage * deltaTime);
+		healthBar.UpdateHealthBar(health, healthMax);
+		if (health <= 0)						//Test si l'ennemi a 0 hp ou moins
+		{
+			GameObject player = GameObject.Find("PlayerCharacter");
+			player.GetComponent<Player>().AddExperience(experience);	//On donne l'experience au joueur
+			player.GetComponentInChildren<EnemyNavManager>().DeleteFromList(gameObject);	//On détruit l'ennemi en question du script de gestion de leur navigation
+			healthBar.UpdateHealthBar(health, healthMax);
+			Destroy(gameObject);				//Et on le détruit
+		}
+	}
+
 	IEnumerator Blink()
 	{
 		Color color = mat.color;
