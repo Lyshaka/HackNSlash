@@ -18,6 +18,7 @@ public class Chest : InteractiveObject
 			string data = manager.GetItem(ID);
 			item = LoadData.CreateItemData(data);
 			Debug.Log("You received : " + item.GetName());
+			GetComponent<ParticleSystem>().Play();
 			return (item);
 		}
 		return (null);
