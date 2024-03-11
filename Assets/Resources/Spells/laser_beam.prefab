@@ -175,7 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 40
   beamLine: {fileID: 0}
-  beamColl: {fileID: 0}
+  isActive: 0
   enemies: []
 --- !u!1 &6361011511748369566
 GameObject:
