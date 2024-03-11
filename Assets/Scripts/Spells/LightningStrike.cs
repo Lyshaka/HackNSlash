@@ -48,7 +48,7 @@ public class LightningStrike : MonoBehaviour
 	{
 		GameObject ret = null;
 		List<GameObject> validTargets = new List<GameObject>();
-		Collider[] targets = Physics.OverlapSphere(transform.position, 3f, enemyLayer);
+		Collider[] targets = Physics.OverlapSphere(transform.position, 5f, enemyLayer);
 		foreach (Collider target in targets)
 		{
 			if (!hitTargets.Contains(target.gameObject) && target.gameObject.layer == 8)
@@ -94,7 +94,7 @@ public class LightningStrike : MonoBehaviour
 
 	IEnumerator Bounce()
 	{
-		yield return new WaitForSeconds(0.06f);
+		yield return new WaitForSeconds(0.1f);
 		GameObject target = GetValidTarget();
 		if (bounces > 0 && target != null)
 		{
