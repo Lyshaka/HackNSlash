@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
 	[SerializeField] private GameObject playerMesh;				//Object du mesh du character
 	[SerializeField] private UserInterfaceManager ui;			//Interface utilisateur
 	[SerializeField] private InventoryInterfaceManager iUI;		//Interface inventaire
+	[SerializeField] private StatInterfaceManager sUI;			//Interface stats
 	[SerializeField] private SpellManager spellManager;			//Manager de spell (duh)
 	[SerializeField] private Manager manager;					//Manager :s
 	private bool inputActive = true;							//Gestion des inputs ou non (pour la pause du jeu)
@@ -26,6 +27,7 @@ public class Player : MonoBehaviour
 	[SerializeField] private float damagePerLevel = 1.5f;		//Dégâts par niveau
 	[SerializeField] private float health;						//Points de vie du joueur
 	[SerializeField] private float maxHealth = 100;				//Points de vie maximum du joueur
+	[SerializeField] private float hpRegen = 10;				//Regeneration de la vie du joueur (hp/s)
 	[SerializeField] private float mana;						//Mana du joueur
 	[SerializeField] private float maxMana = 100;				//Mana maximum du joueur
 	[SerializeField] private float manaRegen = 10;				//Regeneration de la mana du joueur (mana/s)
@@ -94,6 +96,21 @@ public class Player : MonoBehaviour
 	public float GetDamage()
 	{
 		return (damage);
+	}
+
+	public float GetHpRegen()
+	{
+		return (hpRegen);
+	}
+
+	public float GetManaRegen()
+	{
+		return (manaRegen);
+	}
+
+	public int GetNbItem()
+	{
+		return (inventory.Count);
 	}
 
 	public InventoryInterfaceManager GetInventory()
@@ -169,6 +186,7 @@ public class Player : MonoBehaviour
 		stats.SetStats(s, i, d);
 		damage = baseDamage + (damagePerLevel * level);
 		ui.UpdateStatistics(stats, (int)damage);
+		sUI.UpdateText(this);
 	}
 	
 	public void AddExperience(int xp)
@@ -194,10 +212,12 @@ public class Player : MonoBehaviour
 		enemyLayer = (1 << 8);
 		ui = GetComponentInChildren<UserInterfaceManager>();
 		iUI = GetComponentInChildren<InventoryInterfaceManager>();
+		sUI = GetComponentInChildren<StatInterfaceManager>();
 		health = maxHealth;
 		ui.UpdateHealth(health, maxHealth);
 		mana = maxMana;
 		ui.UpdateMana(mana, maxMana);
+		sUI.UpdateText(this);
 		manager = GameObject.Find("Manager").GetComponent<Manager>();
 		ui.UpdateExperience(experience, xpRequired, level);
 		UpdateStats();
