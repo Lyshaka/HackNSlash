@@ -5,12 +5,15 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
 	[Header("Enemy stats")]
+	[SerializeField] protected float damage = 2;//Dégâts de l'ennemi
 	[SerializeField] protected float health;	//Points de vie
 	[SerializeField] protected float healthMax;	//Points de vie maximum
 	[SerializeField] protected float mana;		//Mana
 	[SerializeField] protected float manaMax;	//Mana maximum
 	[SerializeField] protected float armor;		//Armor
 	[SerializeField] protected int experience = 20;	//Experience
+
+	private Player player = null;
 
 	protected Material mat;
 	protected HealthBarManager healthBar;
@@ -24,7 +27,26 @@ public class Enemy : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-			
+		if (player != null)
+		{
+			player.ApplyDamage(damage * Time.deltaTime);
+		}
+	}
+
+	void OnTriggerEnter(Collider other)
+	{
+		if (other.gameObject.layer == 3)
+		{
+			player = other.gameObject.GetComponent<Player>();
+		}
+	}
+
+	void OnTriggerExit(Collider other)
+	{
+		if (other.gameObject.layer == 3)
+		{
+			player = null;
+		}
 	}
 
 	protected void Initialize()

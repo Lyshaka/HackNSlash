@@ -123,6 +123,17 @@ public class Player : MonoBehaviour
 		return (enemyLayer);
 	}
 
+	public void ApplyDamage(float amount)
+	{
+		health -= amount;
+		if (health <= 0)
+		{
+			Debug.Log("You died !");
+			Application.Quit();
+			UnityEditor.EditorApplication.isPlaying = false;
+		}
+	}
+
 	void OnTriggerEnter(Collider other)
 	{
 		if (other.gameObject.layer == 7)
@@ -380,5 +391,14 @@ public class Player : MonoBehaviour
 			}
 		}
 		ui.UpdateMana(mana, maxMana);
+		if (health < maxHealth)
+		{
+			health += hpRegen * Time.deltaTime;
+			if (health > maxHealth)
+			{
+				health = maxHealth;
+			}
+		}
+		ui.UpdateHealth(health, maxHealth);
 	}
 }

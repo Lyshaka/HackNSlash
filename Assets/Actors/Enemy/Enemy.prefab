@@ -81,6 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e484f9892398f740b8c3073df41d107, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 20
   health: 0
   healthMax: 80
   mana: 0
