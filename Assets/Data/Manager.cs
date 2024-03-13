@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Manager : MonoBehaviour
 {
-	string[] items;
-	string[] spells;
+	[SerializeField] private string[] items;
+	[SerializeField] private string[] spells;
 
 	// Start is called before the first frame update
 	void Awake()
@@ -21,7 +21,7 @@ public class Manager : MonoBehaviour
 
 	public string GetItem(int id)
 	{
-		return (items[id + 1]);
+		return (items[id]);
 	}
 
 	public string GetSpell(int id)

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using Unity.VisualScripting;
 
 [Serializable]
 public class Chest : InteractiveObject
@@ -9,12 +10,13 @@ public class Chest : InteractiveObject
 	private Item item;
 	public int ID;
 	private Manager manager;
+	private InventoryInterfaceManager playerInventory;
 
 	public Item ChestUseObject()
 	{
-		if (UseObject())
+		GetComponent<OpenChest>().TriggerChest();
+		if (UseObject() && ID != 0)
 		{
-			GetComponent<OpenChest>().TriggerChest();
 			string data = manager.GetItem(ID);
 			item = LoadData.CreateItemData(data);
 			Debug.Log("You received : " + item.GetName());
@@ -29,5 +31,6 @@ public class Chest : InteractiveObject
 	{
 		activable = true;
 		manager = GameObject.Find("Manager").GetComponent<Manager>();
+		playerInventory = GameObject.Find("PlayerCharacter").GetComponent<Player>().GetInventory();
 	}
 }

@@ -10,8 +10,10 @@ public class Player : MonoBehaviour
 	[SerializeField] private GameObject fireballObject;			//Prefab de la boule de feu
 	[SerializeField] private GameObject playerMesh;				//Object du mesh du character
 	[SerializeField] private UserInterfaceManager ui;			//Interface utilisateur
+	[SerializeField] private InventoryInterfaceManager iUI;		//Interface inventaire
 	[SerializeField] private SpellManager spellManager;			//Manager de spell (duh)
 	[SerializeField] private Manager manager;					//Manager :s
+	private bool inputActive = true;							//Gestion des inputs ou non (pour la pause du jeu)
 	private Rigidbody rb;										//Rigidbody du character
 	private Camera cam;											//Camera du joueur
 	private RaycastHit hit;										//Impact du raycast du curseur
@@ -92,6 +94,11 @@ public class Player : MonoBehaviour
 	public float GetDamage()
 	{
 		return (damage);
+	}
+
+	public InventoryInterfaceManager GetInventory()
+	{
+		return (iUI);
 	}
 
 	public LayerMask GetEnemyLayer()
@@ -180,21 +187,17 @@ public class Player : MonoBehaviour
 
 	private void Initialize()
 	{
-		health = maxHealth;
-		ui.UpdateHealth(health, maxHealth);
-		mana = maxMana;
-		ui.UpdateMana(mana, maxMana);
-	}
-
-	void Start()
-	{
 		rb = GetComponent<Rigidbody>();									//Récupération du rigidbody du character
 		cam = GetComponentInChildren<Camera>();							//Récupération de la caméra
 		cam.transform.LookAt(gameObject.transform);						//Rotation de la caméra vers le joueur
 		detectionLayer = (1 << 6);
 		enemyLayer = (1 << 8);
 		ui = GetComponentInChildren<UserInterfaceManager>();
-		Initialize();
+		iUI = GetComponentInChildren<InventoryInterfaceManager>();
+		health = maxHealth;
+		ui.UpdateHealth(health, maxHealth);
+		mana = maxMana;
+		ui.UpdateMana(mana, maxMana);
 		manager = GameObject.Find("Manager").GetComponent<Manager>();
 		ui.UpdateExperience(experience, xpRequired, level);
 		UpdateStats();
@@ -205,126 +208,145 @@ public class Player : MonoBehaviour
 		ui.UpdateSpell(availableSpells);
 	}
 
+	void Start()
+	{
+		Initialize();
+	}
+
 	void Update()
 	{
 		movInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;			//Récupération des inputs du joueur
 
 		nearestObject = GetNearestObject();																			//Calcul de l'objet le plus proche du joueur
 
-		if (Input.GetKeyDown(KeyCode.E))
+		if (Input.GetKeyDown(KeyCode.I))
 		{
-			if (nearestObject != null && nearestObject.IsActivable())
+			iUI.ToggleInventory();
+			inputActive = !inputActive;
+		}
+
+		//gestion des inputs
+		if (inputActive)
+		{
+			if (Input.GetKeyDown(KeyCode.E))
 			{
-				if (nearestObject.GetType() == typeof(Chest))
+				if (nearestObject != null && nearestObject.IsActivable())
 				{
-					Debug.Log("You have opened " + nearestObject.gameObject.name);
-					Chest chest = nearestObject as Chest;
-					inventory.Add(chest.ChestUseObject());
-					UpdateStats();
-					nearObjects.Remove(nearestObject.GetComponent<InteractiveObject>());
+					if (nearestObject.GetType() == typeof(Chest))
+					{
+						Debug.Log("You have opened " + nearestObject.gameObject.name);
+						Chest chest = nearestObject as Chest;
+						Item item = chest.ChestUseObject();
+						if (item != null)
+						{
+							inventory.Add(item);
+							iUI.AddItem(item);
+							UpdateStats();
+						}
+						nearObjects.Remove(nearestObject.GetComponent<InteractiveObject>());
+					}
+					else
+					{
+						Debug.Log("Nope");
+					}
 				}
 				else
 				{
-					Debug.Log("Nope");
+					Debug.Log("Aucun objet à proximité !");
+				}
+			}
+
+			if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, detectionLayer))	//Lancement de rayon depuis la position du curseur dans le monde
+			{
+				playerMesh.transform.LookAt(new Vector3(hit.point.x, playerMesh.transform.position.y, hit.point.z));	//Rotation du personnage dans la dierction du point visé par le curseur
+			}
+
+			//if (Input.GetButtonDown("Fire1"))																			//Lors de l'appui de la touche de fire on envoie une boule de feu
+			//{
+			//	GameObject fireball = Instantiate(fireballObject, playerMesh.transform.position, playerMesh.transform.rotation);	//Instanciation de la boule de feu au niveau du jouer dans la direction dans laquelle il regarde
+				
+			//}
+
+			if (Input.GetButton("Fire1"))
+			{
+				//Debug.Log("Cost : " + availableSpells[spellIndex].GetCost());
+				
+				if (availableSpells[spellIndex].GetSubType() != "Channel" && !buttonHeld)
+				{
+					if (mana >= availableSpells[spellIndex].GetCost())
+					{
+						spellManager.UseSpell(playerMesh.transform, (Spell)availableSpells[spellIndex], this);
+						mana -= availableSpells[spellIndex].GetCost();
+						ui.UpdateMana(mana, maxMana);
+					}
+				}
+				buttonHeld = true;
+				if (availableSpells[spellIndex].GetSubType() == "Channel")
+				{
+					if (mana > 0)
+					{
+						isChanneling = true;
+						spellManager.ActivateChannel(true);
+						mana -= availableSpells[spellIndex].GetCost() * Time.deltaTime;
+						channelTime += Time.deltaTime;
+					}
+					else
+					{
+						spellManager.ActivateChannel(false);
+					}
 				}
 			}
 			else
 			{
-				Debug.Log("Aucun objet à proximité !");
-			}
-		}
-		
-
-		if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, detectionLayer))	//Lancement de rayon depuis la position du curseur dans le monde
-		{
-			playerMesh.transform.LookAt(new Vector3(hit.point.x, playerMesh.transform.position.y, hit.point.z));	//Rotation du personnage dans la dierction du point visé par le curseur
-		}
-
-		//if (Input.GetButtonDown("Fire1"))																			//Lors de l'appui de la touche de fire on envoie une boule de feu
-		//{
-		//	GameObject fireball = Instantiate(fireballObject, playerMesh.transform.position, playerMesh.transform.rotation);	//Instanciation de la boule de feu au niveau du jouer dans la direction dans laquelle il regarde
-			
-		//}
-
-		if (Input.GetButton("Fire1"))
-		{
-			//Debug.Log("Cost : " + availableSpells[spellIndex].GetCost());
-			
-			if (availableSpells[spellIndex].GetSubType() != "Channel" && !buttonHeld)
-			{
-				if (mana >= availableSpells[spellIndex].GetCost())
+				buttonHeld = false;
+				if (availableSpells[spellIndex].GetSubType() == "Channel")
 				{
-					spellManager.UseSpell(playerMesh.transform, (Spell)availableSpells[spellIndex], this);
-					mana -= availableSpells[spellIndex].GetCost();
-					ui.UpdateMana(mana, maxMana);
-				}
-			}
-			buttonHeld = true;
-			if (availableSpells[spellIndex].GetSubType() == "Channel")
-			{
-				if (mana > 0)
-				{
-					isChanneling = true;
-					spellManager.ActivateChannel(true);
-					mana -= availableSpells[spellIndex].GetCost() * Time.deltaTime;
-					channelTime += Time.deltaTime;
-				}
-				else
-				{
+					isChanneling = false;
 					spellManager.ActivateChannel(false);
 				}
+				channelTime = 0;
 			}
-		}
-		else
-		{
-			buttonHeld = false;
-			if (availableSpells[spellIndex].GetSubType() == "Channel")
-			{
-				isChanneling = false;
-				spellManager.ActivateChannel(false);
-			}
-			channelTime = 0;
-		}
 
-		if (Input.mouseScrollDelta.y < 0f)
-		{
-			if (spellIndex == 0)
+			if (Input.mouseScrollDelta.y < 0f)
 			{
-				spellIndex = 2;
+				if (spellIndex == 0)
+				{
+					spellIndex = 2;
+				}
+				else
+				{
+					spellIndex--;
+				}
+				if (availableSpells[spellIndex].GetSubType() == "Channel")
+				{
+					spellManager.SetChannel(playerMesh.transform, availableSpells[spellIndex], this);
+				}
+				else
+				{
+					spellManager.RemoveChannel();
+				}
+				ui.UpdateSelectedSpell(spellIndex);
 			}
-			else
+			if (Input.mouseScrollDelta.y > 0f)
 			{
-				spellIndex--;
+				if (spellIndex == 2)
+				{
+					spellIndex = 0;
+				}
+				else
+				{
+					spellIndex++;
+				}
+				if (availableSpells[spellIndex].GetSubType() == "Channel")
+				{
+					spellManager.SetChannel(playerMesh.transform, availableSpells[spellIndex], this);
+				}
+				else
+				{
+					spellManager.RemoveChannel();
+				}
+				ui.UpdateSelectedSpell(spellIndex);
 			}
-			if (availableSpells[spellIndex].GetSubType() == "Channel")
-			{
-				spellManager.SetChannel(playerMesh.transform, availableSpells[spellIndex], this);
-			}
-			else
-			{
-				spellManager.RemoveChannel();
-			}
-			ui.UpdateSelectedSpell(spellIndex);
-		}
-		if (Input.mouseScrollDelta.y > 0f)
-		{
-			if (spellIndex == 2)
-			{
-				spellIndex = 0;
-			}
-			else
-			{
-				spellIndex++;
-			}
-			if (availableSpells[spellIndex].GetSubType() == "Channel")
-			{
-				spellManager.SetChannel(playerMesh.transform, availableSpells[spellIndex], this);
-			}
-			else
-			{
-				spellManager.RemoveChannel();
-			}
-			ui.UpdateSelectedSpell(spellIndex);
 		}
 
 		rb.velocity = new Vector3(movInput.x, 0f, movInput.y) * speed;												//Application des mouvements sur le personnage

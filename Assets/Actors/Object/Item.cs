@@ -22,6 +22,11 @@ public class Item
 		dexterity = int.Parse(data[4]);
 	}
 
+	public int GetID()
+	{
+		return (id);
+	}
+
 	public string GetName()
 	{
 		return (name);
