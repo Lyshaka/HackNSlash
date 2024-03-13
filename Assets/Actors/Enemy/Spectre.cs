@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Spectre : Enemy
 {
+	[SerializeField] private Material phaseMat;
+	[SerializeField] private Collider coll;
+
 	[SerializeField] private float phaseTime = 5f;		//Temps de phase
 	[SerializeField] private bool phase = true;			//Phase actuelle
 
@@ -39,15 +42,18 @@ public class Spectre : Enemy
 	IEnumerator PhaseShift()
 	{
 		phase = !phase;													//Changement de phase
-		GetComponent<Collider>().enabled = phase;						//Activation/Désactivation du collider en fonction de la phase
-		Material mat = GetComponent<Renderer>().material;				//Récupération du matériel pour le changer
+		coll.enabled = phase;						//Activation/Désactivation du collider en fonction de la phase
 		if (phase)
 		{
-			mat.color = new Color(255f, mat.color.g, mat.color.b, 1f);	//Material quand phase activé
+			currentMat = defaultMat;
+			renderer.material = currentMat;
+			//mat.color = new Color(255f, mat.color.g, mat.color.b, 1f);	//Material quand phase activé
 		}
 		else
 		{
-			mat.color = new Color(0f, mat.color.g, mat.color.b, 0.2f);	//Material quand phase désactivé
+			currentMat = phaseMat;
+			renderer.material = currentMat;
+			//mat.color = new Color(0f, mat.color.g, mat.color.b, 0.2f);	//Material quand phase désactivé
 		}
 		yield return new WaitForSeconds(phaseTime);						//On attends le temps de phase
 		StartCoroutine(PhaseShift());									//Et on recommence la coroutine

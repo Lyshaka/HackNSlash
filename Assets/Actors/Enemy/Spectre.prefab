@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2373147594256515982, guid: 4adc8d0d302d3fb4ba9d406b431ee6b6, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 4087
+      objectReference: {fileID: 0}
+    - target: {fileID: 2373147594256515982, guid: 4adc8d0d302d3fb4ba9d406b431ee6b6, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3253156473615209195, guid: 4adc8d0d302d3fb4ba9d406b431ee6b6, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -18,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7783648871208828859, guid: 4adc8d0d302d3fb4ba9d406b431ee6b6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -228.2092
+      value: -229.54976
       objectReference: {fileID: 0}
     - target: {fileID: 7783648871208828859, guid: 4adc8d0d302d3fb4ba9d406b431ee6b6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -26,7 +34,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7783648871208828859, guid: 4adc8d0d302d3fb4ba9d406b431ee6b6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -228.59958
+      value: -230.27841
       objectReference: {fileID: 0}
     - target: {fileID: 7783648871208828859, guid: 4adc8d0d302d3fb4ba9d406b431ee6b6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -81,6 +89,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df29e6d2ee035ee489548b226607017a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultMat: {fileID: 2100000, guid: 37a280af863bfd24683a600d1688e865, type: 2}
+  currentMat: {fileID: 0}
+  flickMat: {fileID: 2100000, guid: 08c5bef50c1ff3e4c8a87d8734681b8d, type: 2}
   damage: 30
   health: 0
   healthMax: 100
@@ -88,5 +99,12 @@ MonoBehaviour:
   manaMax: 0
   armor: 0.6
   experience: 35
+  phaseMat: {fileID: 2100000, guid: 20b2468b4ad62ae438ac6ff411cf4b80, type: 2}
+  coll: {fileID: 3562910982999234960}
   phaseTime: 3
   phase: 1
+--- !u!65 &3562910982999234960 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 5448093946904532480, guid: 4adc8d0d302d3fb4ba9d406b431ee6b6, type: 3}
+  m_PrefabInstance: {fileID: 8856755540470173584}
+  m_PrefabAsset: {fileID: 0}

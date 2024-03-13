@@ -435,6 +435,8 @@ MonoBehaviour:
   fireballObject: {fileID: 5174122605670879181, guid: 0b898ac2e5b961843a96845911e41402, type: 3}
   playerMesh: {fileID: 3427841320935889550}
   ui: {fileID: 0}
+  iUI: {fileID: 0}
+  sUI: {fileID: 0}
   spellManager: {fileID: 7921533220953278175}
   manager: {fileID: 0}
   baseDamage: 10
@@ -442,6 +444,7 @@ MonoBehaviour:
   damagePerLevel: 1.5
   health: 0
   maxHealth: 100
+  hpRegen: 10
   mana: 0
   maxMana: 100
   manaRegen: 25
@@ -497,7 +500,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9028194816295815668}
   serializedVersion: 8
-  lengthInSec: 0.5
+  lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -572,7 +575,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -679,7 +682,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 1, g: 1, b: 1, a: 0}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5291,7 +5294,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 0a18b53c84b963d49854b679a59bfcfa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5696,7 +5699,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6592950763476732788, guid: 6f6735f90886a5943888737517c37a21, type: 3}
       propertyPath: m_Size
-      value: 0.52570677
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7536186098793517364, guid: 6f6735f90886a5943888737517c37a21, type: 3}
       propertyPath: m_AnchorMax.y

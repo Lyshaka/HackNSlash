@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+	[SerializeField] protected Material defaultMat;
+	[SerializeField] protected Material currentMat;
+	[SerializeField] protected Material flickMat;
+
 	[Header("Enemy stats")]
 	[SerializeField] protected float damage = 2;//Dégâts de l'ennemi
 	[SerializeField] protected float health;	//Points de vie
@@ -15,7 +19,7 @@ public class Enemy : MonoBehaviour
 
 	private Player player = null;
 
-	protected Material mat;
+	protected new Renderer renderer;
 	protected HealthBarManager healthBar;
 
 	// Start is called before the first frame update
@@ -61,7 +65,8 @@ public class Enemy : MonoBehaviour
 		{
 			armor = 0;
 		}
-		mat = GetComponent<Renderer>().material;
+		renderer = GetComponent<Renderer>();
+		currentMat = defaultMat;
 		healthBar = GetComponentInChildren<HealthBarManager>();
 		healthBar.SetPercent(health / healthMax);
 	}
@@ -101,9 +106,8 @@ public class Enemy : MonoBehaviour
 
 	IEnumerator Blink()
 	{
-		Color color = mat.color;
-		mat.color = Color.white;
+		renderer.material = flickMat;
 		yield return new WaitForSeconds(0.03f);
-		mat.color = color;
+		renderer.material = currentMat;
 	}
 }
