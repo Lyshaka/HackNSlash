@@ -11,6 +11,7 @@ public class StatInterfaceManager : MonoBehaviour
 	[SerializeField] private TextMeshProUGUI strScaling;
 	[SerializeField] private TextMeshProUGUI intScaling;
 	[SerializeField] private TextMeshProUGUI dexScaling;
+	[SerializeField] private TextMeshProUGUI totalDamage;
 
 	[SerializeField] private string damageText = "Damage";
 	[SerializeField] private string hpRegenText = "HP Regen";
@@ -33,13 +34,14 @@ public class StatInterfaceManager : MonoBehaviour
 		statsText.SetText(text);
 	}
 
-	public void UpdateWeapon(Spell spell)
+	public void UpdateWeapon(Player player, Spell spell)
 	{
 		weaponName.text = spell.GetName();
 		baseDamage.text = "Base Damage : " + spell.GetDamage();
 		strScaling.text = "[STR : " + spell.GetStrength() * 100 + "%]";
 		intScaling.text = "[INT : " + spell.GetIntelligence() * 100 + "%]";
 		dexScaling.text = "[DEX : " + spell.GetDexterity() * 100 + "%]";
+		totalDamage.text = "Total Damage : " + player.GetComponent<SpellManager>().ComputeDamage(spell, player.GetStats(), player.GetDamage());
 	}
 
     // Start is called before the first frame update

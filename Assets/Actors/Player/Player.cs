@@ -198,6 +198,7 @@ public class Player : MonoBehaviour
 		damage = baseDamage + (damagePerLevel * level);
 		ui.UpdateStatistics(stats, (int)damage);
 		sUI.UpdateText(this);
+		sUI.UpdateWeapon(this, availableSpells[spellIndex]);
 	}
 	
 	public void AddExperience(int xp)
@@ -231,13 +232,12 @@ public class Player : MonoBehaviour
 		sUI.UpdateText(this);
 		manager = GameObject.Find("Manager").GetComponent<Manager>();
 		ui.UpdateExperience(experience, xpRequired, level);
-		UpdateStats();
 		for (int i = 0; i < 3; i++)
 		{
 			availableSpells.Add(LoadData.CreateSpellsData(manager.GetSpell(i)));
 		}
 		ui.UpdateSpell(availableSpells);
-		sUI.UpdateWeapon(availableSpells[spellIndex]);
+		UpdateStats();
 	}
 
 	void Start()
@@ -368,7 +368,7 @@ public class Player : MonoBehaviour
 					spellManager.RemoveChannel();
 				}
 				ui.UpdateSelectedSpell(spellIndex);
-				sUI.UpdateWeapon(availableSpells[spellIndex]);
+				sUI.UpdateWeapon(this, availableSpells[spellIndex]);
 			}
 			if (Input.mouseScrollDelta.y > 0f)
 			{
@@ -389,7 +389,7 @@ public class Player : MonoBehaviour
 					spellManager.RemoveChannel();
 				}
 				ui.UpdateSelectedSpell(spellIndex);
-				sUI.UpdateWeapon(availableSpells[spellIndex]);
+				sUI.UpdateWeapon(this, availableSpells[spellIndex]);
 			}
 		}
 

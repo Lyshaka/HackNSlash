@@ -71,7 +71,7 @@ public class SpellManager : MonoBehaviour
 		return (ret);
 	}
 
-	float ComputeDamage(Spell spell, Player.Stats stats, float playerBaseDamage)
+	public float ComputeDamage(Spell spell, Player.Stats stats, float playerBaseDamage)
 	{
 		float dmg = 0f;
 
