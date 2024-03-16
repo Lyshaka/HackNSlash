@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 1126646469028144041}
   - component: {fileID: 1699422016964976892}
   - component: {fileID: 6417467822439397887}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Lever
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f176bfe08b6c0254d865e04bb9649b86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doors: []
 --- !u!114 &6417467822439397887
 MonoBehaviour:
   m_ObjectHideFlags: 0

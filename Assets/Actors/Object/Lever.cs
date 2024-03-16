@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Lever : InteractiveObject
 {
+	[SerializeField] Door[] doors;
 
 	public override bool UseObject()
 	{
@@ -11,6 +12,10 @@ public class Lever : InteractiveObject
 		if (ret)
 		{
 			GetComponent<ActivateLever>().TriggerLever();
+			foreach (Door door in doors)
+			{
+				door.Open();
+			}
 		}
 		return (ret);
 	}
