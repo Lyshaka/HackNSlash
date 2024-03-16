@@ -42,18 +42,16 @@ public class Spectre : Enemy
 	IEnumerator PhaseShift()
 	{
 		phase = !phase;													//Changement de phase
-		coll.enabled = phase;						//Activation/Désactivation du collider en fonction de la phase
+		coll.enabled = phase;											//Activation/Désactivation du collider en fonction de la phase
 		if (phase)
 		{
 			currentMat = defaultMat;
 			renderer.material = currentMat;
-			//mat.color = new Color(255f, mat.color.g, mat.color.b, 1f);	//Material quand phase activé
 		}
 		else
 		{
 			currentMat = phaseMat;
 			renderer.material = currentMat;
-			//mat.color = new Color(0f, mat.color.g, mat.color.b, 0.2f);	//Material quand phase désactivé
 		}
 		yield return new WaitForSeconds(phaseTime);						//On attends le temps de phase
 		StartCoroutine(PhaseShift());									//Et on recommence la coroutine

@@ -50,15 +50,17 @@ public class SpellManager : MonoBehaviour
 
 	}
 
-	public void UseSpell(Transform origin, Spell spell, Player player)
+	public bool UseSpell(Transform origin, Spell spell, Player player)
 	{
+		bool ret = false;
 		switch (spell.GetSubType())
 		{
 			case "Projectile":
 				LaunchProjectile(origin, spell, player);
+				ret = true;
 				break;
 			case "Area":
-				CastArea(origin, spell, player);
+				ret = CastArea(origin, spell, player);
 				break;
 			case "Channel":
 				//doothershit
@@ -66,6 +68,7 @@ public class SpellManager : MonoBehaviour
 			default:
 				break;
 		}
+		return (ret);
 	}
 
 	float ComputeDamage(Spell spell, Player.Stats stats, float playerBaseDamage)
@@ -89,7 +92,7 @@ public class SpellManager : MonoBehaviour
 		obj.GetComponent<ProjectileParent>().SetDamage(ComputeDamage(spell, player.GetStats(), player.GetDamage()));
 	}
 
-	void CastArea(Transform origin, Spell spell, Player player)
+	bool CastArea(Transform origin, Spell spell, Player player)
 	{
 		bool hasHit = Physics.Raycast(origin.position, origin.forward, out RaycastHit hit, 10f, player.GetEnemyLayer());
 		if (spell.GetName() == "lightning_strike" && hasHit)
@@ -101,6 +104,7 @@ public class SpellManager : MonoBehaviour
 			ls.SetDamage(ComputeDamage(spell, player.GetStats(), player.GetDamage()));
 			ls.AddHitTarget(hit.transform.gameObject);
 		}
+		return (hasHit);
 	}
 
 	public void SetChannel(Transform origin, Spell spell, Player player)

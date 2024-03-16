@@ -306,8 +306,11 @@ public class Player : MonoBehaviour
 				{
 					if (mana >= availableSpells[spellIndex].GetCost())
 					{
-						spellManager.UseSpell(playerMesh.transform, (Spell)availableSpells[spellIndex], this);
-						mana -= availableSpells[spellIndex].GetCost();
+						bool hit = spellManager.UseSpell(playerMesh.transform, (Spell)availableSpells[spellIndex], this);
+						if (hit)
+						{
+							mana -= availableSpells[spellIndex].GetCost();
+						}
 						ui.UpdateMana(mana, maxMana);
 					}
 				}
