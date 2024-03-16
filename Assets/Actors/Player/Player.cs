@@ -237,6 +237,7 @@ public class Player : MonoBehaviour
 			availableSpells.Add(LoadData.CreateSpellsData(manager.GetSpell(i)));
 		}
 		ui.UpdateSpell(availableSpells);
+		sUI.UpdateWeapon(availableSpells[spellIndex]);
 	}
 
 	void Start()
@@ -360,6 +361,7 @@ public class Player : MonoBehaviour
 					spellManager.RemoveChannel();
 				}
 				ui.UpdateSelectedSpell(spellIndex);
+				sUI.UpdateWeapon(availableSpells[spellIndex]);
 			}
 			if (Input.mouseScrollDelta.y > 0f)
 			{
@@ -380,6 +382,7 @@ public class Player : MonoBehaviour
 					spellManager.RemoveChannel();
 				}
 				ui.UpdateSelectedSpell(spellIndex);
+				sUI.UpdateWeapon(availableSpells[spellIndex]);
 			}
 		}
 
