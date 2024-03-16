@@ -20,6 +20,14 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 37a280af863bfd24683a600d1688e865, type: 2}
+    - target: {fileID: 3974152896400271084, guid: 4adc8d0d302d3fb4ba9d406b431ee6b6, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3974152896400271084, guid: 4adc8d0d302d3fb4ba9d406b431ee6b6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6502335136701064403, guid: 4adc8d0d302d3fb4ba9d406b431ee6b6, type: 3}
       propertyPath: m_Name
       value: Spectre
@@ -64,6 +72,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8928403285084486997, guid: 4adc8d0d302d3fb4ba9d406b431ee6b6, type: 3}
+      propertyPath: enemy
+      value: 
+      objectReference: {fileID: -7110938975538723740}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

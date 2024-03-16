@@ -31,25 +31,19 @@ public class Enemy : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		ApplyDamage();
+	}
+
+	public void SetPlayer(Player value)
+	{
+		player = value;
+	}
+
+	protected void ApplyDamage()
+	{
 		if (player != null)
 		{
 			player.ApplyDamage(damage * Time.deltaTime);
-		}
-	}
-
-	void OnTriggerEnter(Collider other)
-	{
-		if (other.gameObject.layer == 3)
-		{
-			player = other.gameObject.GetComponent<Player>();
-		}
-	}
-
-	void OnTriggerExit(Collider other)
-	{
-		if (other.gameObject.layer == 3)
-		{
-			player = null;
 		}
 	}
 

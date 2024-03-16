@@ -20,7 +20,7 @@ public class Spectre : Enemy
 	// Update is called once per frame
 	void Update()
 	{
-		
+		ApplyDamage();
 	}
 
 	public override void ApplyEffect(float damage)
