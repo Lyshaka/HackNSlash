@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class OpenChest : MonoBehaviour
 {
-	public Transform pivot;
-	public float time = 0.5f;
-	public float angle = 120f;
+	[SerializeField] private Transform pivot;
+	[SerializeField] private float time = 0.5f;
+	[SerializeField] private float angle = 120f;
 
 	// Start is called before the first frame update
 	void Start()

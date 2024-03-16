@@ -277,6 +277,13 @@ public class Player : MonoBehaviour
 						}
 						nearObjects.Remove(nearestObject.GetComponent<InteractiveObject>());
 					}
+					else if (nearestObject.GetType() == typeof(Lever))
+					{
+						InteractiveObject obj = nearestObject;
+						Debug.Log("You have triggered " + obj.gameObject.name);
+						obj.UseObject();
+						nearObjects.Remove(obj.GetComponent<InteractiveObject>());
+					}
 					else
 					{
 						Debug.Log("Nope");
