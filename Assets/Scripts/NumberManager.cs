@@ -39,7 +39,7 @@ public class NumberManager : MonoBehaviour
 		while (elapsedTime < time)
 		{
 			tmp.color = new Color(tmp.color.r, tmp.color.g, tmp.color.b, 1f - elapsedTime / time);
-			transform.position = new Vector3(transform.position.x, transform.position.y - (Time.deltaTime * speed), transform.position.z);
+			transform.position = new Vector3(transform.position.x, transform.position.y + (Time.deltaTime * speed), transform.position.z);
 			elapsedTime += Time.deltaTime;
 			yield return null;
 		}

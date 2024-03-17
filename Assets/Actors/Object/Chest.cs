@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 [Serializable]
 public class Chest : InteractiveObject
 {
+	[SerializeField] private GameObject textObject;
 	private Item item;
 	public int ID;
 	private Manager manager;
@@ -20,6 +21,8 @@ public class Chest : InteractiveObject
 			string data = manager.GetItem(ID);
 			item = LoadData.CreateItemData(data);
 			Debug.Log("You received : " + item.GetName());
+			GameObject obj = Instantiate(textObject, transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
+			obj.GetComponent<Fade>().SetText(item.GetName());
 			GetComponent<ParticleSystem>().Play();
 			return (item);
 		}
