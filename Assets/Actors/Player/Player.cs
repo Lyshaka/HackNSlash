@@ -321,6 +321,10 @@ public class Player : MonoBehaviour
 						}
 						ui.UpdateMana(mana, maxMana);
 					}
+					else
+					{
+						ui.IsOOM();
+					}
 				}
 				buttonHeld = true;
 				if (availableSpells[spellIndex].GetSubType() == "Channel")
@@ -335,6 +339,7 @@ public class Player : MonoBehaviour
 					else
 					{
 						spellManager.ActivateChannel(false);
+						ui.IsOOM();
 					}
 				}
 			}

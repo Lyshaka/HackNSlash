@@ -22,8 +22,11 @@ public class UserInterfaceManager : MonoBehaviour
 	[SerializeField] private TextMeshProUGUI hText;
 
 	[Header("Mana")]
+	[SerializeField] private float oomTime = 0.5f;
 	[SerializeField] private Slider mBar;
 	[SerializeField] private TextMeshProUGUI mText;
+	[SerializeField] private Image oom;
+	private Coroutine OOMCoroutine;
 
 	[Header("Spells")]
 	[SerializeField] private Image spell0Icon;
@@ -82,15 +85,23 @@ public class UserInterfaceManager : MonoBehaviour
 		selectedImage.transform.localPosition = new Vector3(-32.5f + index * 110, 0, 0);
 	}
 
-	// // Start is called before the first frame update
-	// void Start()
-	// {
+	public void IsOOM()
+	{
+		if (OOMCoroutine != null)
+			StopCoroutine(OOMCoroutine);
+		OOMCoroutine = StartCoroutine(PlayOOM());
+	}
 
-	// }
+	IEnumerator PlayOOM()
+	{
+		float elapsedTime = 0;
 
-	// // Update is called once per frame
-	// void Update()
-	// {
-		
-	// }
+		while (elapsedTime < oomTime)
+		{
+			oom.color = new Color(oom.color.r, oom.color.g, oom.color.b, 1 - (elapsedTime / oomTime));
+			//Debug.Log("Color : " + oom.color.a);
+			elapsedTime += Time.deltaTime;
+			yield return null;
+		}
+	}
 }
